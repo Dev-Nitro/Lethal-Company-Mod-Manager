@@ -11,9 +11,10 @@
 	<Optimize>true</Optimize>
 	<DebugType>none</DebugType>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.00</Version>
-    <Company>Team Kronos Development</Company>
+	<ApplicationManifest>app.manifest</ApplicationManifest>
+	<Version>1.01</Version>
+	<FileVersion>1.01</FileVersion>
+    <Company>TeamKronos Development</Company>
   </PropertyGroup>
 
   <ItemGroup>

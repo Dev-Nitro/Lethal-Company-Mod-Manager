@@ -5,13 +5,13 @@ namespace Lethal_Company_Mod_Manager;
 
 internal class Program
 {
-    private static string localVersion = "1.00";
+    private static string localVersion = "1.01";
 
     private static async Task Main() => await LoadMenu();
 
     private static async Task<bool> LoadMenu()
     {
-        Console.Title = $"Lethal Comapny Mod Manager v{localVersion} | Made by Nitro";
+        Console.Title = $"Lethal Company Mod Manager v{localVersion} | Made by Nitro";
 
         Console.Clear();
         Console.WriteLine("[Mod Manager] Checking Mod Manager Version");
@@ -51,7 +51,8 @@ internal class Program
         try
         {
             string steamPath = GetSteamPath();
-            PrintColoredMessage("\r[Mod Manager] ", "Checking Steam installation", ConsoleColor.Blue, ConsoleColor.White);
+            PrintColoredMessage("\r[Mod Manager] ", "Checking Steam installation" +
+                "                              ", ConsoleColor.Blue, ConsoleColor.White);
             if (steamPath == null)
             {
                 await ErrorHandler.HandleNoneEXError("Steam installation was not found");
@@ -59,7 +60,8 @@ internal class Program
             }
 
             string lethalComapnyPath = GetSteamLethalCompanyPath(steamPath);
-            PrintColoredMessage("\r[Mod Manager] ", "Checking Lethal Company installation", ConsoleColor.Blue, ConsoleColor.White);
+            PrintColoredMessage("\r[Mod Manager] ", "Checking Lethal Company installation" +
+                "                              ", ConsoleColor.Blue, ConsoleColor.White);
             if (lethalComapnyPath == null)
             {
                 await ErrorHandler.HandleNoneEXError("Lethal Company installation was not found");
@@ -67,7 +69,8 @@ internal class Program
             }
 
             string bepInPath = Path.Combine(lethalComapnyPath, "BepInEx");
-            PrintColoredMessage("\r[Mod Manager] ", "Checking BepInEx Mod Manager installation", ConsoleColor.Blue, ConsoleColor.White);
+            PrintColoredMessage("\r[Mod Manager] ", "Checking BepinEx Mod Manager installation" +
+                "                              ", ConsoleColor.Blue, ConsoleColor.White);
             if (!Directory.Exists(bepInPath))
             {
                 await ErrorHandler.HandleNoneEXError("BepInEx Mod Manager was not found. You can install it here => https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/");
@@ -75,7 +78,8 @@ internal class Program
             }
 
             string pluginsPath = Path.Combine(bepInPath, "plugins");
-            PrintColoredMessage("\r[Mod Manager] ", "Uninstalling all current plugins", ConsoleColor.Blue, ConsoleColor.White);
+            PrintColoredMessage("\r[Mod Manager] ", "Uninstalling all current plugins" +
+                "                              ", ConsoleColor.Blue, ConsoleColor.White);
             if (!Directory.Exists(pluginsPath))
             {
                 await ErrorHandler.HandleNoneEXError("BepInEx Plugins Folder was not found");
@@ -83,11 +87,13 @@ internal class Program
             }
             await DeleteOldMods(pluginsPath);
 
-            PrintColoredMessage("\r[Mod Manager] ", "Installing plugins", ConsoleColor.Blue, ConsoleColor.White);
+            PrintColoredMessage("\r[Mod Manager] ", "Installing plugins" +
+                "                              ", ConsoleColor.Blue, ConsoleColor.White);
             await HttpHandler.DownloadFilesFromRepo(Path.GetFullPath(pluginsPath), "Plugins");
             await HttpHandler.DownloadFilesFromRepo(Path.GetFullPath(pluginsPath), "Plugins Extra");
 
-            PrintColoredMessage("\r[Mod Manager] ", "Mod Installation is Complete                        ", ConsoleColor.Blue, ConsoleColor.Green);
+            PrintColoredMessage("\r[Mod Manager] ", "Mod Installation is Complete" +
+                "                              ", ConsoleColor.Blue, ConsoleColor.Green);
 
             PrintColoredMessage("\n[Mod Manager] ", "Press Any Key to Exit", ConsoleColor.Blue, ConsoleColor.White);
             Console.ReadKey();

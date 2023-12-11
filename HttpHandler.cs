@@ -62,7 +62,8 @@ internal class HttpHandler
                 if (totalLength.HasValue)
                 {
                     double percentage = (double)totalRead / totalLength.Value * 100;
-                    Program.PrintColoredMessage("\r[Mod Manager] ", $"Downloading {fileName} | {percentage:F2}%     ", ConsoleColor.Blue, ConsoleColor.White);
+                    Program.PrintColoredMessage("\r[Mod Manager] ", $"Downloading {fileName} | {percentage:F2}%" +
+                        "                              ", ConsoleColor.Blue, ConsoleColor.White);
                 }
             }
         }
@@ -105,7 +106,8 @@ internal class HttpHandler
     }
     private static void ExtractZipFile(string zipFilePath, string extractToFolder)
     {
-        Program.PrintColoredMessage("\r[Mod Manager] ", $"Extracting {Path.GetFileName(zipFilePath)}", ConsoleColor.Blue, ConsoleColor.White);
+        Program.PrintColoredMessage("\r[Mod Manager] ", $"Extracting {Path.GetFileName(zipFilePath)}" +
+            "                              ", ConsoleColor.Blue, ConsoleColor.White);
         ZipFile.ExtractToDirectory(zipFilePath, extractToFolder);
     }
 }
