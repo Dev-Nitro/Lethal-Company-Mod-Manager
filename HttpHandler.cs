@@ -18,29 +18,6 @@ internal class HttpHandler
         return await response.Content.ReadAsStringAsync();
     }
 
-    public static async Task HttpDownloadFileAsync(string address, string path)
-    {
-        try
-        {
-            using var response = await httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-
-            using var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
-            using var contentStream = await response.Content.ReadAsStreamAsync();
-            var buffer = new byte[4096];
-            int read;
-
-            while ((read = await contentStream.ReadAsync(buffer)) > 0)
-            {
-                await fileStream.WriteAsync(buffer.AsMemory(0, read));
-            }
-        }
-        catch (HttpRequestException ex)
-        {
-            await ErrorHandler.HandleError(ex, "Error During Init Download");
-        }
-    }
-
     public static async Task HttpDownloadFileLogAsync(string endpoint, string destination, string fileName)
     {
         try
