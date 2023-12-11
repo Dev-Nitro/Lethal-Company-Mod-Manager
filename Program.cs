@@ -50,61 +50,48 @@ internal class Program
     {
         try
         {
+            // Checks if Steam is installed
             string steamPath = GetSteamPath();
             PrintColoredMessage("\r[Mod Manager] ", "Checking Steam installation" +
                 "                              ", ConsoleColor.Blue, ConsoleColor.White);
-            if (steamPath == null)
-            {
-                await ErrorHandler.HandleNoneEXError("Steam installation was not found");
-                return false;
-            }
+            if (steamPath == null) return await ErrorHandler.HandleNoneEXError("Steam installation was not found");
 
+            // Checks if Lethal Company is installed
             string lethalComapnyPath = GetSteamLethalCompanyPath(steamPath);
             PrintColoredMessage("\r[Mod Manager] ", "Checking Lethal Company installation" +
                 "                              ", ConsoleColor.Blue, ConsoleColor.White);
-            if (lethalComapnyPath == null)
-            {
-                await ErrorHandler.HandleNoneEXError("Lethal Company installation was not found");
-                return false;
-            }
+            if (lethalComapnyPath == null) return await ErrorHandler.HandleNoneEXError("Lethal Company installation was not found");
 
+            // Checks if BepinEx Mod Pack for Lethal Company is installed
             string bepInPath = Path.Combine(lethalComapnyPath, "BepInEx");
             PrintColoredMessage("\r[Mod Manager] ", "Checking BepinEx Mod Manager installation" +
                 "                              ", ConsoleColor.Blue, ConsoleColor.White);
-            if (!Directory.Exists(bepInPath))
-            {
-                await ErrorHandler.HandleNoneEXError("BepInEx Mod Manager was not found. You can install it here => https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/");
-                return false;
-            }
+            if (!Directory.Exists(bepInPath)) return await ErrorHandler.HandleNoneEXError("BepInEx Mod Manager was not found. You can install it here => https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/");
 
+            // Checks if you have a plugins folder within BepinEx to store the mods
             string pluginsPath = Path.Combine(bepInPath, "plugins");
             PrintColoredMessage("\r[Mod Manager] ", "Uninstalling all current plugins" +
                 "                              ", ConsoleColor.Blue, ConsoleColor.White);
-            if (!Directory.Exists(pluginsPath))
-            {
-                await ErrorHandler.HandleNoneEXError("BepInEx Plugins Folder was not found");
-                return false;
-            }
+            if (!Directory.Exists(pluginsPath)) return await ErrorHandler.HandleNoneEXError("BepInEx Plugins Folder was not found");
+
+            // Delete all previous mods within plugins folder
             await DeleteOldMods(pluginsPath);
 
+            // Download new Plugins from github repo
             PrintColoredMessage("\r[Mod Manager] ", "Installing plugins" +
                 "                              ", ConsoleColor.Blue, ConsoleColor.White);
             await HttpHandler.DownloadFilesFromRepo(Path.GetFullPath(pluginsPath), "Plugins");
             await HttpHandler.DownloadFilesFromRepo(Path.GetFullPath(pluginsPath), "Plugins Extra");
 
+            // Installation complete message
             PrintColoredMessage("\r[Mod Manager] ", "Mod Installation is Complete" +
                 "                              ", ConsoleColor.Blue, ConsoleColor.Green);
-
             PrintColoredMessage("\n[Mod Manager] ", "Press Any Key to Exit", ConsoleColor.Blue, ConsoleColor.White);
             Console.ReadKey();
             Environment.Exit(0);
             return true;
         }
-        catch (Exception ex)
-        {
-            await ErrorHandler.HandleError(ex, "Fatal Error During Installation");
-            return false;
-        }
+        catch (Exception ex) { return await ErrorHandler.HandleError(ex, "Fatal Error During Installation"); }
     }
     public static void PrintColoredMessage(string prefixMessage, string message, ConsoleColor prefixColor, ConsoleColor messageColor)
     {
