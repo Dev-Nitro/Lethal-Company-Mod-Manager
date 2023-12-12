@@ -5,7 +5,7 @@ namespace Lethal_Company_Mod_Manager;
 
 internal class Program
 {
-    private static string localVersion = "1.02";
+    private static string localVersion = "1.03";
 
     private static async Task Main() => await LoadMenu();
 

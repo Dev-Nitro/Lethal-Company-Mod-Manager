@@ -12,8 +12,8 @@
 	<DebugType>none</DebugType>
     <InvariantGlobalization>true</InvariantGlobalization>
 	<ApplicationManifest>app.manifest</ApplicationManifest>
-	<Version>1.01</Version>
-	<FileVersion>1.01</FileVersion>
+	<Version>1.03</Version>
+	<FileVersion>1.03</FileVersion>
     <Company>TeamKronos Development</Company>
   </PropertyGroup>
 
