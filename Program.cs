@@ -121,19 +121,24 @@ internal class Program
 
     private static string GetSteamPath()
     {
+        // Check correct Steam reg key if 32 bit or 64 bit op sys
         string registryPath = Environment.Is64BitOperatingSystem
             ? @"SOFTWARE\WOW6432Node\Valve\Steam"
             : @"SOFTWARE\Valve\Steam";
 
         RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(registryPath);
 
+
         if (registryKey != null)
         {
+            // Find the steam installed path via reg key
             object steamPath = registryKey.GetValue("InstallPath");
 
+            // If the Steam installed path is real return it
             if (steamPath != null) return steamPath.ToString();
         }
 
+        // If no Steam installation found return null
         return null;
     }
 
@@ -141,8 +146,21 @@ internal class Program
     {
         string lethalCompanyPath = Path.Combine(steamPath, "steamapps", "common", "Lethal Company");
 
+        // If Lethal Company exists on main drive return it
         if (Directory.Exists(lethalCompanyPath)) return lethalCompanyPath;
 
+        // Check other drives for Lethal Company installation
+        foreach (DriveInfo drive in DriveInfo.GetDrives())
+        {
+            if (drive.DriveType == DriveType.Fixed && drive.RootDirectory.FullName.ToLower() != Path.GetPathRoot(steamPath).ToLower())
+            {
+                lethalCompanyPath = Path.Combine(drive.RootDirectory.FullName, "SteamLibrary", "steamapps", "common", "Lethal Company");
+
+                if (Directory.Exists(lethalCompanyPath)) return lethalCompanyPath;
+            }
+        }
+
+        // If Lethal Company is not found within main drive steam library or other drive steam librarys return null
         return null;
     }
     private static bool CheckForUpdate()
